@@ -18,7 +18,7 @@ $ npm install
 Add your github access token to `.env` like `GITHUB_ACCESS_TOKEN=XXX`. Then,
 
 ```
-$ node index.js <REPO_NAME>
+$ node index.js <REPO_NAME> <OUTPUT_CSV> <stargazers | forkers>
 ```
 
 Note that `<REPO_NAME>` also includes the username or the organization name: e.g. segmentio/analytics.js.

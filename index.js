@@ -7,6 +7,7 @@ dotenv.config();
 
 var repo = process.argv[2] || 'segmentio/analytics.js';
 var output = process.argv[3] || 'output.csv';
+var source = process.argv[4] || 'stargazers';
 var github = require('./lib/github');
 var co = require('co');
 var fs = require('fs');
@@ -17,20 +18,25 @@ var ProgressBar = require('progress');
  */
 
 co(function *(){
-  console.log('Fetching stargazers for repo: '+repo);
-  var stargazers = yield github.getStargazers(repo);
-  console.log('Fetching user profiles for '+stargazers.length+' stargazers');
+  console.log('Fetching '+source+' for repo: '+repo);
+  var sourceList;
+  if(source === 'stargazers') {
+    sourceList = yield github.getStargazers(repo);
+  } else if(source === 'forkers') {
+    sourceList = yield github.getForkers(repo);
+  }
+  console.log('Fetching user profiles for '+sourceList.length+' '+source);
 
   var bar = new ProgressBar('Profiles [:bar] :percent :etas', {
     complete: '=',
     incomplete: ' ',
     width: 60,
-    total: stargazers.length
+    total: sourceList.length
   });
 
-  for (var i = 0; i < stargazers.length; i++) {
+  for (var i = 0; i < sourceList.length; i++) {
     try {
-      var user = yield github.getEmail(stargazers[i]);
+      var user = yield github.getEmail(sourceList[i]);
       var line = ['"'+user.username+'"', '"'+user.name+'"', '"'+user.email+'"'].join(',') + '\n';
       fs.appendFileSync(output, line, { encoding: 'utf8' });
       bar.tick();
@@ -38,5 +44,5 @@ co(function *(){
       console.error(e);
     }
   }
-  console.log('Done writing stargazer profiles to '+output);
+  console.log('Done writing '+source+' profiles to '+output);
 });
