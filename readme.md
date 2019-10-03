@@ -15,7 +15,7 @@ $ npm install
 
 ## Usage
 
-Make sure to add your github access token to `./lib/github.js`. Then,
+Add your github access token to `.env` like `GITHUB_ACCESS_TOKEN=XXX`. Then,
 
 ```
 $ node index.js <REPO_NAME>
