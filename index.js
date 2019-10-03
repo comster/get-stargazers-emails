@@ -14,7 +14,9 @@ var fs = require('fs');
  */
 
 co(function *(){
+  console.log('Fetching stargazers for repo: '+repo);
   var stargazers = yield github.getStargazers(repo);
+  console.log('Fetching user profiles for '+stargazers.length+' stargazers');
   for (var i = 0; i < stargazers.length; i++) {
     try {
       var user = yield github.getEmail(stargazers[i]);
