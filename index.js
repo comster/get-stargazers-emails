@@ -31,7 +31,7 @@ co(function *(){
   for (var i = 0; i < stargazers.length; i++) {
     try {
       var user = yield github.getEmail(stargazers[i]);
-      var line = [user.username, user.name, user.email].join(',') + '\n';
+      var line = ['"'+user.username+'"', '"'+user.name+'"', '"'+user.email+'"'].join(',') + '\n';
       fs.appendFileSync(output, line, { encoding: 'utf8' });
       bar.tick();
     } catch (e) {
