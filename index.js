@@ -4,6 +4,7 @@
  */
 
 var repo = process.argv[2] || 'segmentio/analytics.js';
+var output = process.argv[3] || 'output.csv';
 var github = require('./lib/github');
 var co = require('co');
 var fs = require('fs');
@@ -18,9 +19,10 @@ co(function *(){
     try {
       var user = yield github.getEmail(stargazers[i]);
       var line = [user.username, user.email, user.hireable].join(',') + '\n';
-      fs.appendFileSync('output.csv', line, { encoding: 'utf8' });
+      fs.appendFileSync(output, line, { encoding: 'utf8' });
     } catch (e) {
       console.error(e);
     }
   }
+  console.log('Done writing stargazer profiles to '+output);
 });
